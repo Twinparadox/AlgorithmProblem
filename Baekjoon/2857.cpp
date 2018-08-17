@@ -1,22 +1,23 @@
 #include <iostream>
 #include <string>
+#include <vector>
 using namespace std;
 int main(void)
 {
-	string s[5];
-	int arr[5], size = 0, len;
-	for (int i = 0; i < 5; i++)
-		cin >> s[i];
-	for (int i = 0; i < 5; i++)
+	int n = 5;
+	vector<int> arr;
+	
+	for (int i = 1; i <= n; i++)
 	{
-		len = s[i].length();
-		for (int j = 0; j < len - 2; j++)
-			if (s[i][j] == 'F' && s[i][j + 1] == 'B' && s[i][j + 2] == 'I')
-				arr[size] = i + 1, size++;
+		string str;
+		cin >> str;
+		if (str.find("FBI", 0) != string::npos)
+			arr.push_back(i);
 	}
-	if (size == 0)
+
+	if (arr.empty())
 		cout << "HE GOT AWAY!";
 	else
-		for (int i = 0; i < size; i++)
+		for (int i = 0; i < arr.size(); i++)
 			cout << arr[i] << ' ';
 }
