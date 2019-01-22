@@ -3,7 +3,8 @@ using namespace std;
 int main(void)
 {
 	int t, n;
-	double c, g, sum1, sum2;
+	int sum1, sum2;
+	double c, g;
 	cin >> t;
 	cout.precision(1);
 	while (t--)
@@ -13,9 +14,11 @@ int main(void)
 		for (int i = 0; i < n; i++)
 		{
 			cin >> c >> g;
-			sum1 += g*c;
+			sum1 += g * 10 * c;
 			sum2 += c;
 		}
-		cout << (int)sum2 << " " << fixed << (double)sum1 / sum2 << "\n";
+
+		int tmp = (int)((double)sum1 / sum2 + 0.5) * 10;
+		cout << (int)sum2 << " " << fixed << (double)tmp / 100 << "\n";
 	}
 }
