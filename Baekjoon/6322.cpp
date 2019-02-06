@@ -5,7 +5,7 @@ int main(void)
 {
 	int a, b, c, find;
 	cout.precision(3);
-	for (int i = 1;; i++)
+	for(int i=1;;i++)
 	{
 		cin >> a >> b >> c;
 		if (a == 0 && b == 0 && c == 0)
