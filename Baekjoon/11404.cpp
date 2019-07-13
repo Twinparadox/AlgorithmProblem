@@ -1,5 +1,5 @@
 #include <iostream>
-#define INF 1000000000
+#define INF 1000000001
 using namespace std;
 int graph[100][100], n;
 void Floyd()
@@ -26,7 +26,7 @@ int main(void)
 		if (graph[v1 - 1][v2 - 1] > w)
 			graph[v1 - 1][v2 - 1] = w;
 	}
-	
+
 	Floyd();
 
 	for (int i = 0; i < n; i++)
@@ -34,7 +34,7 @@ int main(void)
 		for (int j = 0; j < n; j++)
 		{
 			if (graph[i][j] == INF)
-				cout << '0 ';
+				cout << "0 ";
 			else
 				cout << graph[i][j] << ' ';
 		}
