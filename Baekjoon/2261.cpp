@@ -1,67 +1,93 @@
+#include <cstdio>
+#pragma warning(disable:4996)
 #include <algorithm>
 #include <iostream>
+#include <limits.h>
 #include <math.h>
 #include <vector>
 using namespace std;
-struct coord {
-	int x;
-	int y;
-};
-double minDistance = -1;
-vector<struct coord> arr;
-
-double minDist(double a, double b)
+vector<pair<int, int> > points;
+bool compare(const pair<int, int> a, const pair<int, int> b)
+{
+	if (a.first < b.first)
+		return true;
+	else if (a.first == b.first)
+	{
+		if (a.second < b.second)
+			return true;
+		else
+			return false;
+	}
+	else
+		return false;
+}
+bool compareY(const pair<int, int> a, const pair<int, int> b)
+{
+	return a.second < b.second;
+}
+int dist(const pair<int, int> a, const pair<int, int> b)
+{
+	return (pow((a.first - b.first), 2) + pow((a.second - b.second), 2));
+}
+int minNum(int a, int b)
 {
 	return a < b ? a : b;
 }
-double mesaureDistance(const struct coord a, const struct coord b)
+int closestPair(int start, int end)
 {
-	double distance = pow(a.x - b.x, 2) + pow(a.y - b.y, 2);
-	if (minDistance == -1 || distance < minDistance)
-		minDistance = distance;
-	return distance;
-}
-double closestPair(int left, int right)
-{
-	int size = right - left + 1;
-	if (size == 2)
-		return mesaureDistance(arr[left], arr[right]);
-	else
+	int size = end - start + 1;
+	if (size <= 16)
 	{
-		int mid = (left + right) / 2;
-		double cpLeft = closestPair(left, mid);
-		double cpRight = closestPair(mid + 1, right);
-		double distRange = minDist(cpLeft, cpRight);
-
-
-	}
-}
-int compareCoord(const struct coord& a, const struct coord& b)
-{
-	if (a.x > b.x)
-		return 1;
-	else if (a.x == b.x)
-	{
-		if (a.y > b.y)
-			return 1;
-		else if (a.y == b.y)
-			return 0;
-		else
-			return -1;
+		int min = INT_MAX;
+		for (int i = start; i <= end; i++)
+		{
+			for (int j = i + 1; j <= end; j++)
+			{
+				int d = dist(points[i], points[j]);
+				min = d < min ? d : min;
+			}
+		}
+		return min;
 	}
 	else
-		return -1;
+	{
+		int mid = (start + end) / 2;
+		pair<int, int> mPoint = points[mid];
+
+		int leftRange = closestPair(start, mid);
+		int rightRange = closestPair(mid + 1, end);
+		int distRange = minNum(leftRange, rightRange);
+
+		vector<pair<int, int> > tmpPoints;
+		for (int i = start; i <= end; i++)
+			if (pow((points[i].first - mPoint.first), 2) <= distRange)
+				tmpPoints.push_back(points[i]);
+
+		sort(tmpPoints.begin(), tmpPoints.end(), compareY);
+		int size = tmpPoints.size();
+		for (int i = 0; i < size - 1; i++)
+		{
+			for (int j = i + 1; j < size && (tmpPoints[j].second - tmpPoints[i].second) < distRange; j++)
+			{
+				int minSub = dist(tmpPoints[i], tmpPoints[j]);
+				if (minSub < distRange)
+					distRange = minSub;
+			}
+		}
+		return distRange;
+	}
 }
 int main(void)
 {
-	int N, x, y;
+	cin.tie(0);
+	ios::sync_with_stdio(false);
+
+	int N;
 	cin >> N;
-
-	arr.reserve(N);
+	points = vector<pair<int, int> >(N);
 	for (int i = 0; i < N; i++)
-		cin >> arr[i].x >> arr[i].y;
+		cin >> points[i].first >> points[i].second;
 
-	sort(arr.begin(), arr.end(), compareCoord);
-
-	closestPair(0, N - 1);
+	sort(points.begin(), points.end(), compare);
+	cout << closestPair(0, N - 1);
 }
