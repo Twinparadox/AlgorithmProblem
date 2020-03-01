@@ -37,9 +37,13 @@ int main(void)
 	}
 
 	for (int i = 1; i <= N; i++)
+	{
 		if (indeg[i] == 0)
+		{
 			q.push(i);
-
+			ans[i] += arr[i];
+		}
+	}
 	while (!q.empty())
 	{
 		int need = q.front();
@@ -49,15 +53,15 @@ int main(void)
 		for (int i = 0; i < size; i++)
 		{
 			int nextNeed = link[need][i];
-			int sum = ans[need] + arr[need];
+			int sum = ans[need] + arr[nextNeed];
 
 			ans[nextNeed] = ans[nextNeed] < sum ? sum : ans[nextNeed];
 
-			if (indeg[nextNeed] - 1 == 0)
+			if (--indeg[nextNeed] == 0)
 				q.push(nextNeed);
 		}
 	}
 
 	for (int i = 1; i <= N; i++)
-		cout << ans[i] + arr[i] << '\n';
+		cout << ans[i] << '\n';
 }
