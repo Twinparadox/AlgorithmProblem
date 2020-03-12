@@ -12,12 +12,12 @@ int main(void)
 	cin >> N >> M;
 	vector<long long> arr(N + 1, 0);
 	vector<long long> prefix(N + 1, 0);
-	vector<long long> counts(N + 1, 0);
+	vector<long long> counts(M + 1, 0);
 
 	for (int i = 1; i <= N; i++)
 	{
 		cin >> arr[i];
-		
+
 		prefix[i] = (arr[i] % M + prefix[i - 1] % M) % M;
 
 		if (prefix[i] == 0)
