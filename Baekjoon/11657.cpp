@@ -7,16 +7,12 @@ struct Edge
 {
 	int src, dest, weight;
 };
-struct Graph
-{
-	int V, E;
-	vector<struct Edge> edge;
-};
-struct Graph graph;
+int V, E;
+vector<struct Edge> edge;
 
-void printArr(vector<int>& dist, int n)
+void printArr(vector<long long>& dist)
 {
-	for (int i = 1; i < n; ++i)
+	for (int i = 2; i <= V; i++)
 	{
 		if (dist[i] == INT_MAX)
 			cout << -1;
@@ -27,11 +23,11 @@ void printArr(vector<int>& dist, int n)
 }
 void BellmanFord(int src)
 {
-	int V = graph.V;
-	int E = graph.E;
-	vector<int> dist(V);
+	bool flag = true;
+	vector<long long> dist;
+	dist.resize(V + 1);
 
-	for (int i = 0; i < V; i++)
+	for (int i = 1; i <= V; i++)
 		dist[i] = INT_MAX;
 	dist[src] = 0;
 
@@ -39,41 +35,47 @@ void BellmanFord(int src)
 	{
 		for (int j = 0; j < E; j++)
 		{
-			int u = graph.edge[j].src;
-			int v = graph.edge[j].dest;
-			int weight = graph.edge[j].weight;
+			int u = edge[j].src;
+			int v = edge[j].dest;
+			long long weight = edge[j].weight;
 			if (dist[u] != INT_MAX && dist[u] + weight < dist[v])
+			{
 				dist[v] = dist[u] + weight;
+				if (i == V)
+					flag = false;
+			}
 		}
 	}
-
-	for (int i = 0; i < E; i++)
+	for (int j = 0; j < E; j++)
 	{
-		int u = graph.edge[i].src;
-		int v = graph.edge[i].dest;
-		int weight = graph.edge[i].weight;
-		if (dist[u] != INT_MAX && dist[u] + weight < dist[v])
+		int u = edge[j].src;
+		int v = edge[j].dest;
+		long long w = edge[j].weight;
+		if (dist[u] != INT_MAX && dist[u] + w < dist[v])
 		{
-			cout << -1;
-			return;
+			flag = false;
+			break;
 		}
 	}
 
-	printArr(dist, V);
-	return;
+	if (flag)
+		printArr(dist);
+	else
+		cout << -1;
 }
 int main(void)
 {
-	int V, E, A, B, C;
+	cin.tie(0);
+	cout.tie(0);
+	ios_base::sync_with_stdio(false);
+
+	int A, B, C;
 	cin >> V >> E;
 
-	graph.V = V;
-	graph.E = E;
-	graph.edge = vector<struct Edge>(E);
+	edge.resize(E);
 	for (int i = 0; i < E; i++)
-	{
-		cin >> A >> B >> C;
-		graph.edge[i] = { A - 1,B - 1,C };
-	}
-	BellmanFord(0);
+		cin >> edge[i].src >> edge[i].dest >> edge[i].weight;
+	BellmanFord(1);
+
+	return 0;
 }
