@@ -34,18 +34,22 @@ int main(void)
 	for (int i = 1; i <= V; i++)
 		parent[i] = i;
 
+	bool cycle = false;
 	int a, b;
 	for (int i = 0; i < E; i++)
 	{
 		cin >> a >> b;
-		unionParent(a, b);
+		if (findParent(a) == findParent(b))
+		{
+			cycle = true;
+			break;
+		}
+		else
+			unionParent(a, b);
 	}
 
-	cout << "각 원소가 속한 집합: \n";
-	for (int i = 1; i <= V; i++)
-		cout << findParent(i) << ' ';
-
-	cout << "\n부모테이블 : \n";
-	for (int i = 1; i <= V; i++)
-		cout << parent[i] << ' ';
+	if (cycle)
+		cout << "Cycle";
+	else
+		cout << "None-Cycle";
 }
